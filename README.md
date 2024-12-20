@@ -1,5 +1,6 @@
-# Project files
-Group Assignment for Python Programming (Student Enrollment System)
+# Project file
+Group Assignment for Python Programming (SAIA 1113)
+(Student Enrollment System)
 
 
 ## Objective
