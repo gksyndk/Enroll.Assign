@@ -51,31 +51,66 @@ else:
 #-Remove course
 #-View
 def start_menu():
-    if currentID in studentID:
-        menu = int(input('Menu\n1.Register Course\n2.Drop Courses\n3.Enrollment Status'))
-        if menu == 1:
-            subjects = [
-                {'code': 'ML119', 'name': 'Machine Learning', 'credits': 4},
-                {'code': 'CS102', 'name': 'Python Programming', 'credits': 4},
-                {'code': 'DM111', 'name': 'Discrete Math', 'credits': 3},
-                {'code': 'DAT101', 'name': 'Data Management', 'credits': 3},
-                {'code': 'IA101', 'name': 'Introduction to AI', 'credits': 2},
-            ]
-            print('Available Subjects:')
-            for subjects in subjects:
-                print(f'{subjects["code"]}: {subjects["name"]} ({subjects["credits"]} credits)')
-            
-            print('\nEnroll in subjects by entering their codes (type "done" when finished):')
-            enrolled_subjects =[]
-            while True:
-                code = input("Enter Subject Code :").upper()
-                if code in subjects:
-                    enrolled_subjects.append(code)
-                elif code == 'done':
-                    break
-                else:
-                    print('Invalid code. Please try again')
+    while True:
+        enrolled_subjects = []
+        subjects = [
+            {'code': 'ML119', 'name': 'Machine Learning', 'credits': 4},
+            {'code': 'CS102', 'name': 'Python Programming', 'credits': 4},
+            {'code': 'DM111', 'name': 'Discrete Math', 'credits': 3},
+            {'code': 'DAT101', 'name': 'Data Management', 'credits': 3},
+            {'code': 'IA101', 'name': 'Introduction to AI', 'credits': 2},
+        ]
+        if currentID in studentID:
+            menu = int(input('Menu\n1.Register Course\n2.Drop Courses\n3.Enrollment Status\nSelect Option :'))
+            if menu == 1:
+                #show the available subject
+                print('Available Subjects:')
+                for subject in subjects:
+                    print(f'{subject["code"]}: {subject["name"]} ({subject["credits"]} credits)')
 
+                #insert registration for the subject
+                print('\nEnroll in subjects by entering their codes (type "done" when finished):')
+
+                while True:
+                    code = input('Enter Subject code: ').upper()
+                    if code == 'DONE':
+                        print("The subjects code has been registered. You can view the data via menu option.")
+                        break
+
+                    sub = next((s for s in subjects if s['code']==code), None)
+                    #next is use to iterate the next element after going through the list
+                    if sub not in enrolled_subjects:
+                        enrolled_subjects.append(sub)
+                        print (f'Enrolled in {sub['name']}')
+                    elif sub in enrolled_subjects:
+                        print('You are already enrolled in this subject.')
+                    else:
+                        print('Invalid code. Try again.')
+
+            elif menu == 2:
+                #removing subject
+                while True:
+                    code = input('Enter Subject code you wish to drop (type "done" when finished): ').upper()
+                    if code == 'DONE':
+                        print("The subjects code has been registered. You can view the data via menu option.")
+                        break
+                    sub = next((s for s in subjects if s['code'] == code), None)
+                    if sub in enrolled_subjects:
+                        enrolled_subjects.remove(sub)
+                        print(f'Subject {sub['name']} removed.')
+                    elif sub not in enrolled_subjects:
+                        print('The subject is not in your registered course.')
+                    else:
+                        print('Invalid code. Try again.')
+
+            elif menu == 3:
+                print("\nYou are enrolled in the following subjects:")
+                total_credits = 0
+                for subject in enrolled_subjects:
+                    print(f"{subject['code']}: {subject['name']} ({subject['credits']} credits)")
+                    total_credits += subject["credits"]
+
+start_menu()
 #Admin
 #-Handle course
 #-View report
