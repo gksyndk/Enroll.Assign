@@ -77,8 +77,14 @@ def start_menu():
                         print("The subjects code has been registered. You can view the data via menu option.")
                         break
 
-                    sub = next((s for s in subjects if s['code']==code), None)
+                  #sub = next((s for s in subjects if s['code']==code), None)
                     #next is use to iterate the next element after going through the list
+                    # if we dont use next
+                    sub = None
+                    for s in subjects:
+                        if s['code'] == code:
+                            sub = s
+                            break
                     if sub not in enrolled_subjects:
                         enrolled_subjects.append(sub)
                         print (f'Enrolled in {sub['name']}')
