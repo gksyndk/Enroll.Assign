@@ -61,7 +61,7 @@ def start_menu():
             {'code': 'IA101', 'name': 'Introduction to AI', 'credits': 2},
         ]
         if currentID in studentID:
-            menu = int(input('Menu\n1.Register Course\n2.Drop Courses\n3.Enrollment Status\nSelect Option :'))
+            menu = int(input('Menu\n1.Register Course\n2.Drop Courses\n3.Enrollment Status\n4.Exit\nSelect Option :'))
             if menu == 1:
                 #show the available subject
                 print('Available Subjects:')
@@ -105,6 +105,7 @@ def start_menu():
 
             elif menu == 3:
                 print("\nYou are enrolled in the following subjects:")
+                #supposedly count the total credits too
                 total_credits = 0
                 for subject in enrolled_subjects:
                     print(f"{subject['code']}: {subject['name']} ({subject['credits']} credits)")
