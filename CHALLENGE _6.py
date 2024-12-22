@@ -52,7 +52,7 @@ else:
 #-View
 def start_menu():
     login_admin_student(signin)
-    if studentID == currentID:
+    if currentID in studentID:
         menu = input('Menu\n1.Register Course\n2.Drop Courses\n3.Enrollment Status')
         if menu == 1:
             subjects = [
