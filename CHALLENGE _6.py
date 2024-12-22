@@ -2,24 +2,23 @@
 #-Student
 #-Admin
 def login_admin_student(singin):
-    while True:
-        if signin == 1:
-            student = str(input("Enter student ID :"))
+    if signin == 1:
+        student = str(input("Enter student ID :"))
         # Student Valid ID
-            if student in studentID:
-                print("Welcome", student)
-                return student
-            else:
-                print("Invalid student ID")
-        elif signin == 2:
-            admin = input("Enter admin ID :")
-            if admin in adminID:
-                print("Welcome", admin)
-                return admin
-            else:
-                print("Invalid admin ID")
+        if student in studentID:
+            print("Welcome", student)
+            return student
         else:
-            print("Invalid Option")
+            print("Invalid student ID")
+    elif signin == 2:
+        admin = input("Enter admin ID :")
+        if admin in adminID:
+            print("Welcome", admin)
+            return admin
+        else:
+            print("Invalid admin ID")
+    else:
+        print("Invalid Option")
 
 studentID=["A24AI0033","A24AI0044"]
 adminID = "Admin123"
