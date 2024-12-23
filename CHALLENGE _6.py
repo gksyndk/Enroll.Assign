@@ -52,9 +52,9 @@ else:
 #-Add course
 #-Remove course
 #-View
+enrolled_subjects = []
 def start_menu():
     while True:
-        enrolled_subjects = []
         subjects = [
             {'code': 'ML119', 'name': 'Machine Learning', 'credits': 4},
             {'code': 'CS102', 'name': 'Python Programming', 'credits': 4},
@@ -89,7 +89,7 @@ def start_menu():
                             break
                     if sub not in enrolled_subjects:
                         enrolled_subjects.append(sub)
-                        print (f'Enrolled in {sub['name']}')
+                        print (f"Enrolled in {sub['name']}")
                     elif sub in enrolled_subjects:
                         print('You are already enrolled in this subject.')
                     else:
@@ -105,19 +105,23 @@ def start_menu():
                     sub = next((s for s in subjects if s['code'] == code), None)
                     if sub in enrolled_subjects:
                         enrolled_subjects.remove(sub)
-                        print(f'Subject {sub['name']} removed.')
+                        print(f"Subject {sub['name']} removed.")
                     elif sub not in enrolled_subjects:
                         print('The subject is not in your registered course.')
                     else:
                         print('Invalid code. Try again.')
 
             elif menu == 3:
-                print("\nYou are enrolled in the following subjects:")
-                #supposedly count the total credits too
-                total_credits = 0
-                for subject in enrolled_subjects:
-                    print(f"{subject['code']}: {subject['name']} ({subject['credits']} credits)")
-                    total_credits += subject["credits"]
+                while True:
+                    print("\nYou are enrolled in the following subjects:")
+                    #supposedly count the total credits too
+                    total_credits = 0
+                    for subject in enrolled_subjects:
+                        print(f"{subject['code']}: {subject['name']} ({subject['credits']} credits)")
+                        total_credits += subject["credits"]
+                    exit_menu=int(input("Select 1 To Exit :"))
+                    if exit_menu == 1:
+                        break
 
 start_menu()
 #Admin
