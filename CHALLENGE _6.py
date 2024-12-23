@@ -2,7 +2,7 @@
 #-Student
 #-Admin
 
-def login_admin_student(singin):
+def login_admin_student(signin):
     if signin == 1:
         student = str(input("Enter student ID :"))
         # Student Valid ID
@@ -98,6 +98,10 @@ def start_menu():
             elif menu == 2:
                 #removing subject
                 while True:
+                    # show the current subject
+                    print('Current Subjects:')
+                    for subject in enrolled_subjects:
+                        print(f'{subject["code"]}: {subject["name"]} ({subject["credits"]} credits)')
                     code = input('Enter Subject code you wish to drop (type "done" when finished): ').upper()
                     if code == 'DONE':
                         print("The subjects code has been registered. You can view the data via menu option.")
@@ -122,9 +126,6 @@ def start_menu():
                     exit_menu=int(input("Select 1 To Exit :"))
                     if exit_menu == 1:
                         break
-            else:
-                print('Registration is done.')
-                break
 
 start_menu()
 #Admin
