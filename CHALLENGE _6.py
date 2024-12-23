@@ -122,6 +122,9 @@ def start_menu():
                     exit_menu=int(input("Select 1 To Exit :"))
                     if exit_menu == 1:
                         break
+            else:
+                print('Registration is done.')
+                break
 
 start_menu()
 #Admin
