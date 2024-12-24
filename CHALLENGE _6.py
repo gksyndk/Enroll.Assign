@@ -52,8 +52,12 @@ else:
 #-Add course
 #-Remove course
 #-View
-enrolled_subjects = []
+
 def start_menu():
+    enrolled_subjects = []
+    total_credits = 0
+    max_credits = 12
+    min_credits = 6
     while True:
         subjects = [
             {'code': 'ML119', 'name': 'Machine Learning', 'credits': 4},
@@ -64,7 +68,7 @@ def start_menu():
         ]
         if currentID in studentID:
             menu = int(input('Menu\n1.Register Course\n2.Drop Courses\n3.Enrollment Status\n4.Exit\nSelect Option :'))
-            if menu == 1:
+             if menu == 1:
                 #show the available subject
                 print('Available Subjects:')
                 for subject in subjects:
@@ -87,13 +91,24 @@ def start_menu():
                         if s['code'] == code:
                             sub = s
                             break
+
                     if sub not in enrolled_subjects:
                         enrolled_subjects.append(sub)
                         print (f"Enrolled in {sub['name']}")
-                    elif sub in enrolled_subjects:
+                        total_credits += sub["credits"]
+
+                    if total_credits > max_credits:
+                        print(f"\nYou have exceeded the maximum credit limit ({max_credits}). Please remove some subjects.")
+
+                    if total_credits < min_credits:
+                            print(f"\nYou need to enroll in at least {min_credits} credits. Please add more subjects.")
+
+                    if sub in enrolled_subjects:
                         print('You are already enrolled in this subject.')
+                        
                     else:
                         print('Invalid code. Try again.')
+
 
             elif menu == 2:
                 #removing subject
