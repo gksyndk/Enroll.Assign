@@ -1,0 +1,213 @@
+# Define data structures
+courses = {
+    "Math101": {"max_seats": 3, "enrolled": [], "credits": 3},
+    "Eng102": {"max_seats": 2, "enrolled": [], "credits": 2},
+    "Sci103": {"max_seats": 4, "enrolled": [], "credits": 4},
+}
+
+students = {
+    "S001": {"name": "Alice", "enrolled_courses": [], "total_credits": 0},
+    "S002": {"name": "Bob", "enrolled_courses": [], "total_credits": 0},
+}
+
+admins = {
+    "A001": {"name": "Admin One"},
+    "A002": {"name": "Admin Two"},
+}
+
+CREDIT_LIMIT = 10  # Max credits per student
+
+
+# Functions for Login
+def login():
+    print("Login to the Course Enrollment System")
+    user_id = input("Enter your ID: ")
+
+    if user_id in students:
+        print(f"Welcome, {students[user_id]['name']} (Student)!")
+        return {"role": "student", "id": user_id}
+    elif user_id in admins:
+        print(f"Welcome, {admins[user_id]['name']} (Admin)!")
+        return {"role": "admin", "id": user_id}
+    else:
+        print("Invalid ID. Please try again.")
+        return None
+
+
+# Functions for Student Features
+def enroll_student(student_id, course_name):
+    if course_name not in courses:
+        return f"Course {course_name} does not exist."
+    if student_id not in students:
+        return f"Student ID {student_id} not found."
+    
+    course = courses[course_name]
+    student = students[student_id]
+    
+    if len(course["enrolled"]) >= course["max_seats"]:
+        return f"Course {course_name} is full."
+    
+    if course_name in student["enrolled_courses"]:
+        return f"Student {student_id} is already enrolled in {course_name}."
+    
+    if student["total_credits"] + course["credits"] > CREDIT_LIMIT:
+        return f"Enrolling in {course_name} exceeds the credit limit of {CREDIT_LIMIT} credits."
+    
+    # Enroll the student
+    course["enrolled"].append(student_id)
+    student["enrolled_courses"].append(course_name)
+    student["total_credits"] += course["credits"]
+    return f"Student {student_id} successfully enrolled in {course_name}."
+
+
+def drop_student(student_id, course_name):
+    if course_name not in courses:
+        return f"Course {course_name} does not exist."
+    if student_id not in students:
+        return f"Student ID {student_id} not found."
+    
+    course = courses[course_name]
+    student = students[student_id]
+    
+    if course_name not in student["enrolled_courses"]:
+        return f"Student {student_id} is not enrolled in {course_name}."
+    
+    # Drop the student
+    course["enrolled"].remove(student_id)
+    student["enrolled_courses"].remove(course_name)
+    student["total_credits"] -= course["credits"]
+    return f"Student {student_id} successfully dropped {course_name}."
+
+
+def view_available_courses():
+    return [
+        f"{course}: {data['max_seats'] - len(data['enrolled'])} seats available"
+        for course, data in courses.items()
+    ]
+
+
+def view_student_status(student_id):
+    if student_id not in students:
+        return f"Student ID {student_id} not found."
+    
+    student = students[student_id]
+    return {
+        "name": student["name"],
+        "enrolled_courses": student["enrolled_courses"],
+        "total_credits": student["total_credits"],
+    }
+
+
+# Functions for Administrator Features
+def add_course(course_name, max_seats, credits):
+    if course_name in courses:
+        return f"Course {course_name} already exists."
+    
+    courses[course_name] = {"max_seats": max_seats, "enrolled": [], "credits": credits}
+    return f"Course {course_name} added successfully."
+
+
+def remove_course(course_name):
+    if course_name not in courses:
+        return f"Course {course_name} does not exist."
+    
+    # Unenroll all students from the course
+    for student_id in courses[course_name]["enrolled"]:
+        student = students[student_id]
+        student["enrolled_courses"].remove(course_name)
+        student["total_credits"] -= courses[course_name]["credits"]
+    
+    del courses[course_name]
+    return f"Course {course_name} removed successfully."
+
+
+def view_enrollment_data():
+    enrollment_data = {}
+    for course, data in courses.items():
+        enrollment_data[course] = {
+            "enrolled": [students[student_id]["name"] for student_id in data["enrolled"]],
+            "available_seats": data["max_seats"] - len(data["enrolled"]),
+        }
+    return enrollment_data
+
+
+def generate_report():
+    report = []
+    for student_id, student in students.items():
+        report.append(
+            f"{student['name']} (ID: {student_id}) - Enrolled Courses: {student['enrolled_courses']}, Total Credits: {student['total_credits']}"
+        )
+    return report
+
+
+# Main Loop for User Interaction
+def main():
+    print("Welcome to the Course Enrollment System!")
+    user = None
+    while not user:
+        user = login()
+    
+    if user["role"] == "student":
+        student_id = user["id"]
+        while True:
+            print("\n1. Enroll in a course")
+            print("2. Drop a course")
+            print("3. View available courses")
+            print("4. View enrollment status")
+            print("5. Logout")
+            
+            choice = input("Enter your choice: ")
+            
+            if choice == "1":
+                course_name = input("Enter Course Name: ")
+                print(enroll_student(student_id, course_name))
+            elif choice == "2":
+                course_name = input("Enter Course Name: ")
+                print(drop_student(student_id, course_name))
+            elif choice == "3":
+                print("\nAvailable Courses:")
+                for course in view_available_courses():
+                    print(course)
+            elif choice == "4":
+                print(view_student_status(student_id))
+            elif choice == "5":
+                print("Logging out...")
+                break
+            else:
+                print("Invalid choice. Please try again.")
+    
+    elif user["role"] == "admin":
+        while True:
+            print("\n1. Add a course")
+            print("2. Remove a course")
+            print("3. View enrollment data")
+            print("4. Generate enrollment report")
+            print("5. Logout")
+            
+            choice = input("Enter your choice: ")
+            
+            if choice == "1":
+                course_name = input("Enter Course Name: ")
+                max_seats = int(input("Enter Maximum Seats: "))
+                credits = int(input("Enter Credits: "))
+                print(add_course(course_name, max_seats, credits))
+            elif choice == "2":
+                course_name = input("Enter Course Name: ")
+                print(remove_course(course_name))
+            elif choice == "3":
+                print("\nEnrollment Data:")
+                for course, data in view_enrollment_data().items():
+                    print(f"{course}: {data}")
+            elif choice == "4":
+                print("\nEnrollment Report:")
+                for report in generate_report():
+                    print(report)
+            elif choice == "5":
+                print("Logging out...")
+                break
+            else:
+                print("Invalid choice. Please try again.")
+
+
+# Run the system
+main()
