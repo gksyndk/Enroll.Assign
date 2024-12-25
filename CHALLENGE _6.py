@@ -17,7 +17,7 @@ def login_admin_student():
         print("Menu\n1.Student\n2.Admin")
         signin = int(input("Select Option :"))
         if signin == 1:  # Student login
-            student = input("Enter student ID: ").strip()
+            student = input("Enter student ID: ").strip().upper()
             currentID = student
             if student in studentID:
                 print("Welcome, Student:", student)
