@@ -3,33 +3,31 @@
 #-Admin
 
 def login_admin_student(signin):
-    if signin == 1:
-        student = str(input("Enter student ID :"))
-        # Student Valid ID
+    if signin == 1:  # Student login
+        student = input("Enter student ID: ").strip()
         if student in studentID:
-            print("Welcome", student)
-            return student
+            print("Welcome, Student:", student)
+            return 'student', student
         else:
-            print("Invalid student ID")
-    elif signin == 2:
-        admin = input("Enter admin ID :")
-        if admin in adminID:
-            print("Welcome", admin)
-            return admin
-        else:
-            print("Invalid admin ID")
-    else:
-        print("Invalid Option")
+            print("Invalid student ID. Please try again.")
+            return None, None
 
+    elif signin == 2:  # Admin login
+        admin = input("Enter admin ID: ").strip()
+        if admin == adminID:
+            print("Welcome, Admin:", admin)
+            return 'admin', admin
+        else:
+            print("Invalid admin ID. Please try again.")
+            return None, None
+
+    else:
+        print("Invalid option. Please select 1 for Student or 2 for Admin.")
+        return None, None
 
 studentID=["A24AI0033","A24AI0044"]
 adminID = "Admin123"
 
-#Choose Student or Admin
-print("Menu\n1.Student\n2.Admin")
-signin = int(input("Select Option :"))
-#Verification#Current ID to hold ID key for add,remove,view.
-currentID=login_admin_student(signin)
 #Without function
 """if login == 1:
     student = str(input("Enter student ID :"))
@@ -52,21 +50,20 @@ else:
 #-Add course
 #-Remove course
 #-View
-
-def start_menu():
-    enrolled_subjects = []
-    total_credits = 0
-    max_credits = 12
-    min_credits = 6
-    while True:
-        subjects = [
+student_data = {}
+enrolled_subjects = []
+subjects = [
             {'code': 'ML119', 'name': 'Machine Learning', 'credits': 4},
             {'code': 'CS102', 'name': 'Python Programming', 'credits': 4},
             {'code': 'DM111', 'name': 'Discrete Math', 'credits': 3},
             {'code': 'DAT101', 'name': 'Data Management', 'credits': 3},
             {'code': 'IA101', 'name': 'Introduction to AI', 'credits': 2},
         ]
-        if currentID in studentID:
+def student_menu(currentID):
+    total_credits = sum(sub["credits"] for sub in enrolled_subjects)
+    max_credits = 12
+    min_credits = 6
+    while True:
             menu = int(input('Menu\n1.Register Course\n2.Drop Courses\n3.Enrollment Status\n4.Exit\nSelect Option :'))
             if menu == 1:
                 #show the available subject
@@ -84,7 +81,7 @@ def start_menu():
                         break
 
                   #sub = next((s for s in subjects if s['code']==code), None)
-                    #next is use to iterate the next element after going through the list
+                    #next is used to iterate the next element after going through the list
                     # if we dont use next
                     sub = None
                     for s in subjects:
@@ -139,12 +136,17 @@ def start_menu():
                     if exit_menu == 1:
                         break
             else:
-                print('Registration is done.')
+                student_data[currentID] = {
+                    "enrolled_subjects": enrolled_subjects,
+                    "total_credits": total_credits,
+                }
+                print(f"Data saved for {currentID}. Exiting...")
                 break
         # Admin
         # -Handle course
         # -View report
-        elif adminID in currentID:
+def admin_menu(currentID):
+        while True:
             menu = int(input('Menu\n1.Manage Course\n2.View Students Enrollment\n3.Exit\nSelect Option :'))
             if menu == 1:
                 print('The subjects available for this courses are:')
@@ -181,11 +183,26 @@ def start_menu():
                     else:
                         print('Invalid option.')
 
+            elif menu == 2:
+                print("Student Enrollment Data:")
+                for student_id, data in student_data.items():
+                    print(f"Student ID: {student_id}, Enrolled Subjects: {data['enrolled_subjects']}")
 
+            else:
+                print('No such ID exists.')
 
-        else:
-            print('No such ID exists.')
+def enroll_sys():
+    # Choose Student or Admin
+    print("Menu\n1.Student\n2.Admin")
+    signin = int(input("Select Option :"))
 
+    # Verification#Current ID to hold ID key for add,remove,view.
+    role, currentID = login_admin_student(signin)
+    if role == 'student':
+        student_menu(currentID)
+    elif role == 'admin':
+        admin_menu(currentID)
+    else:
+        print("Invalid login details. Exiting...")
 
-start_menu()
-
+enroll_sys()
