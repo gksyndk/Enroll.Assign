@@ -123,7 +123,7 @@ def student_menu(currentID):
 #Admin Menu
 def admin_menu():
     while True:
-        menu = int(input('Menu\n1.Manage Course\n2.View Students Enrollment\n3.Exit\nSelect Option :'))
+        menu = int(input('Menu\n1.Manage Course\n2.View Students Enrollment\n3.Logout1\nSelect Option :'))
         if menu == 1:
             print('The subjects available for this courses are:')
             for subject in subjects:
@@ -174,7 +174,10 @@ def admin_menu():
                 for subject in data['enrolled_subjects']:
                     print(f"{subject['code']:<8}{subject['name']:<20}{subject['credits']:<6}")
 
+        elif menu == 3:
+            break
+
         else:
-            print('No such ID exists.')
+            print("-Invalid Option!-")
 
 login_admin_student()
