@@ -96,11 +96,9 @@ def start_menu():
                         enrolled_subjects.append(sub)
                         print (f"Enrolled in {sub['name']}")
                         total_credits += sub["credits"]
-
-                    if total_credits > max_credits:
-                        print(f"\nYou have exceeded the maximum credit limit ({max_credits}). Please remove some subjects.")
-
-                    if total_credits < min_credits:
+                        if total_credits > max_credits:
+                            print(f"\nYou have exceeded the maximum credit limit ({max_credits}). Please remove some subjects.")
+                        elif total_credits < min_credits:
                             print(f"\nYou need to enroll in at least {min_credits} credits. Please add more subjects.")
 
                     if sub in enrolled_subjects:
