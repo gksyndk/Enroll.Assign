@@ -68,7 +68,7 @@ def start_menu():
         ]
         if currentID in studentID:
             menu = int(input('Menu\n1.Register Course\n2.Drop Courses\n3.Enrollment Status\n4.Exit\nSelect Option :'))
-             if menu == 1:
+            if menu == 1:
                 #show the available subject
                 print('Available Subjects:')
                 for subject in subjects:
@@ -101,12 +101,11 @@ def start_menu():
                         elif total_credits < min_credits:
                             print(f"\nYou need to enroll in at least {min_credits} credits. Please add more subjects.")
 
-                    if sub in enrolled_subjects:
+                    elif sub in enrolled_subjects:
                         print('You are already enrolled in this subject.')
-                        
+
                     else:
                         print('Invalid code. Try again.')
-
 
             elif menu == 2:
                 #removing subject
@@ -131,16 +130,62 @@ def start_menu():
             elif menu == 3:
                 while True:
                     print("\nYou are enrolled in the following subjects:")
-                    #supposedly count the total credits too
-                    total_credits = 0
+
                     for subject in enrolled_subjects:
                         print(f"{subject['code']}: {subject['name']} ({subject['credits']} credits)")
-                        total_credits += subject["credits"]
+                    print(f'Total Credits: {total_credits}')
+
                     exit_menu=int(input("Select 1 To Exit :"))
                     if exit_menu == 1:
                         break
+            else:
+                print('Registration is done.')
+                break
+        # Admin
+        # -Handle course
+        # -View report
+        elif adminID in currentID:
+            menu = int(input('Menu\n1.Manage Course\n2.View Students Enrollment\n3.Exit\nSelect Option :'))
+            if menu == 1:
+                print('The subjects available for this courses are:')
+                for subject in subjects:
+                    print(f'{subject["code"]}: {subject["name"]} ({subject["credits"]} credits)')
+                while True:
+                    action = input('1.Add Course\n2.Drop Course\n3.Exit\nSelect Option : ')
+                    if action == 1:
+                        sub_to_add = input('Enter subject name: ')
+                        code_to_add = input('Enter subject code: ')
+                        credit_to_add= int(input('Enter subject credits: '))
+
+                        if any(s['code'] == code_to_add for s in subjects):
+                            print(f"Subject with code {code_to_add} already exists.")
+                        else:
+                            new_subject = {"code": code_to_add, "name": sub_to_add, "credits": credit_to_add}
+                            subjects.append(new_subject)
+                            print(f"Subject {sub_to_add} added successfully!")
+
+                    elif action == 2:
+                        code_to_remove = input('Enter subject code: ')
+                        sub_to_remove = None
+                        for s in subjects:
+                            if s['code'] == code_to_remove:
+                                sub_to_remove = s
+                                break
+                        if sub_to_remove:
+                            subjects.remove(sub_to_remove)
+                        else:
+                            print(f"Subject with code {code_to_remove} does not exist in the system.")
+
+                    elif action == 3:
+                        break
+                    else:
+                        print('Invalid option.')
+
+
+
+        else:
+            print('No such ID exists.')
+
 
 start_menu()
-#Admin
-#-Handle course
-#-View report
+
