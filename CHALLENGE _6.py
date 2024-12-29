@@ -1,4 +1,3 @@
-# DB
 studentID = ["A24AI0033", "A24AI0044"]
 adminID = "Admin123"
 student_data = {}  # Store student data here, including enrolled courses
@@ -9,7 +8,6 @@ subjects = [
     {'code': 'DAT101', 'name': 'Data Management', 'credits': 3},
     {'code': 'IA101', 'name': 'Introduction to AI', 'credits': 2},
 ]
-
 
 # Login Student or Admin
 def login_admin_student():
@@ -35,16 +33,16 @@ def login_admin_student():
         else:
             print("Invalid option. Please select 1 for Student or 2 for Admin.")
 
-
+# Student Menu
 # Student Menu
 def student_menu(currentID):
     total_credits = 0  # Keep track of the student's total credits
     max_credits = 12
     min_credits = 6
-    student_data[currentID] = {"enrolled_subjects": [], "total_credits": total_credits}  # Initialize student data
+    student_data[currentID] = {"enrolled_subjects": [], "total_credits": total_credits}
 
     while True:
-        menu = int(input('Menu\n1.Register Course\n2.Drop Courses\n3.Enrollment Status\n4.Exit\nSelect Option :'))
+        menu = int(input('Menu\n1.Register Course\n2.Drop Courses\n3.View Enrollment\n4.View Status\n5.Exit\nSelect Option :'))
         if menu == 1:
             # Show the available subjects
             print('Available Subjects:')
@@ -118,14 +116,28 @@ def student_menu(currentID):
             if exit_menu == 1:
                 pass
 
+        elif menu == 4:
+            # Show approval status
+            print("\nApproval Status of Registered Subjects:")
+            for subject in student_data[currentID]["enrolled_subjects"]:
+                print(f"{subject['code']}: {subject['name']} ({subject['credits']} credits)")
+
+            total_credits = student_data[currentID]["total_credits"]
+            if total_credits < 12:
+                print(f"\nTotal Credits: {total_credits} - Status: APPROVED\n")
+            else:
+                print(f"\nTotal Credits: {total_credits} - Status: NOT APPROVED (Minimum 12 credits required)\n")
+
+        elif menu == 5:
+            break
+
         else:
             print("Invalid option.")
-            break
 
 # Admin Menu
 def admin_menu():
     while True:
-        menu = int(input('Menu\n1.Manage Course\n2.View Students Enrollment\n3.Logout\nSelect Option :'))
+        menu = int(input('Menu\n1.Manage Course\n2.View Students Enrollment\n3.Report\n4.Logout\nSelect Option :'))
         if menu == 1:
             # Manage courses (add/drop)
             print('The subjects available for this courses are:')
@@ -167,10 +179,10 @@ def admin_menu():
             # View all students' enrollments
             print("\nStudent Enrollment Data:")
 
-            # Check kalau ada student enrolled courses
+            # Check if any student is enrolled in courses
             check_students = False
 
-            #Print student punya course
+            # Print each student's enrolled courses
             for student_id, data in student_data.items():
                 if data['enrolled_subjects']:
                     check_students = True
@@ -185,6 +197,26 @@ def admin_menu():
                 print("No students have enrolled in any courses.")
 
         elif menu == 3:
+            # Write a report on the number of students registered for each course
+            print("\nReport on the number of students registered based on course\n")
+            course_registration = {}
+
+            # Count num
+            for student_id, data in student_data.items():
+                for subject in data['enrolled_subjects']:
+                    if subject['code'] not in course_registration:
+                        course_registration[subject['code']] = 0
+                    course_registration[subject['code']] += 1
+
+            print(f"{'Code':<8}{'Name':<20}{'Registered Students':<20}")
+            print("-" * 50)
+            for subject in subjects:
+                code = subject['code']
+                name = subject['name']
+                count = course_registration.get(code, 0)
+                print(f"{code:<8}{name:<20}{count:<20}")
+
+        elif menu == 4:
             break
 
         else:
